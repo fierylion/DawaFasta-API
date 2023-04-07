@@ -1,0 +1,11 @@
+#.env
+DawaFasta/.env
+
+#pycache
+DawaFasta/__pycache__
+
+#Mysql Pycache
+product/__pycache__
+
+#Mysql migrations
+product/migrations
