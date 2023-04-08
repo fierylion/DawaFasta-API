@@ -26,6 +26,9 @@ from .serializers import (
 def Home(request):
     return HttpResponse('<h1>Hello How are you</h1>')
 
+def Unknown_Routes(request):
+    return Response({'msg': 'Unkown Route'}, status=status.HTTP_404_NOT_FOUND)
+
 #external functions used in someplaces on views
 def is_uuid(s, id=''):
     try:
@@ -33,7 +36,7 @@ def is_uuid(s, id=''):
         return s
     except:
         raise serializers.ValidationError(
-            {id: f'{s} not valid id'}
+            f'Error={id}={s} not valid id!'
         )
 def remove_password(dict, attr):
     dict = copy(dict)

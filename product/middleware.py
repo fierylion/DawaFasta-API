@@ -1,9 +1,30 @@
 import jwt
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import serializers
+from .errors import extract_error_message
+# for managing validation errors
+class ValidationErrorMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        if(isinstance(response, HttpResponse)):
+            data =extract_error_message(response) 
+            if(data):
+                if len(data)==3:
+                    return JsonResponse({'id': data[1], 'err': data[2]}, status=400)
+                return JsonResponse({'err': data[1]}, status=400)
+            return response
+        if(isinstance(response, serializers.ValidationError)):
+            return JsonResponse({
+                'status': 'error',
+                'message': response.detail
+            }, status=400)
+        return response
 
 def user_authentication_middleware(get_response):
     def middleware(request):
@@ -12,7 +33,7 @@ def user_authentication_middleware(get_response):
             path_id = None if len(path_details)<=4 else path_details[4]
             if(path_id is None):
                 raise serializers.ValidationError(
-                    'Invalid Route'
+                    'Error=Invalid Route!'
                 )
             if 'Authorization' not in request.headers:
                 return JsonResponse({'error': 'User not    authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -34,13 +55,14 @@ def user_authentication_middleware(get_response):
 
 def company_authentication_middleware(get_response):
     def middleware(request):
+    
         if(request.path.startswith('/api/v1/company')):
             #ensure it is the correct company
             path_details = request.path.split('/')
             path_id = None if len(path_details)<=4 else path_details[4]
             if(path_id is None):
                 raise serializers.ValidationError(
-                    'Invalid Route'
+                    'Error=Invalid Route!'
                 )
             if 'Authorization' not in request.headers:
                 return JsonResponse({'error': 'Company not authenticated, SignUp for a company'}, status=status.HTTP_401_UNAUTHORIZED)

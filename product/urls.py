@@ -12,5 +12,6 @@ urlpatterns = [
     path(r'api/v1/login/user', views.user_login),
     path(r'api/v1/user/<str:userID>', views.single_user),
     path(r'api/v1/user/<str:userID>/purchase', views.user_purchase),
-    path(r'api/v1/user/<str:userID>/purchase/history', views.user_purchase_history)
+    path(r'api/v1/user/<str:userID>/purchase/history', views.user_purchase_history),
+    path('*', views.Unknown_Routes)
 ]
