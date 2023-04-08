@@ -58,6 +58,8 @@ MIDDLEWARE = [
     'product.middleware.user_authentication_middleware',
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 ROOT_URLCONF = 'DawaFasta.urls'
 
 TEMPLATES = [
