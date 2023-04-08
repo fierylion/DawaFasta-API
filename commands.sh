@@ -2,8 +2,7 @@
 
 pip install --upgrade pip
 
-pip install -r requirement.txt
+pip install -r requirements.txt
 
-source /path/to/venv/bin/activate
 
-pip install gunicorn
+
