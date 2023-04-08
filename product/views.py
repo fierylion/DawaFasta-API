@@ -204,6 +204,7 @@ def company_sales(request, compID, medID):
             "customer_name": purchase.patient_id.name,
             "amount": purchase.number,
             "time": purchase.purchase_time,
+            "status": purchase.status
         } for purchase in sales]
         return Response({'data': data}, status=status.HTTP_200_OK)
 
