@@ -181,8 +181,10 @@ def company_sales(request, compID, medID):
     # modify sales
     is_uuid(compID, 'Company ID')
     is_uuid(medID, 'Medicine ID')
-    if sale_id:
-        sale_id = is_uuid(request.GET.get('sale'), "Sale ID")
+    sale = request.GET.get('sale')
+    sale_id= ''
+    if sale:
+        sale_id = is_uuid(sale, "Sale ID")
     stat = request.GET.get('status')
     if(sale_id and stat):
         if len(stat)>=10:
