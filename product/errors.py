@@ -8,7 +8,11 @@ def validation_error_decorator(func):
             return func(*args, **kwargs)
         except serializers.ValidationError as exc:
             details = exc.detail
-            return JsonResponse({'err': f'{details["id"]} is not a valid id for {details["det"]}'}, status=400)
+            id = details.get('id', None)
+            field= details.get('det', None)
+            if(not(id or field)):
+                return JsonResponse(details, status=400)
+            return JsonResponse({'err': f'{id} is not a valid id for {field}'}, status=400)
     
     return wrapper
 
