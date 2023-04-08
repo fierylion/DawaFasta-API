@@ -9,8 +9,8 @@ from django.http import Http404
 from django.contrib.auth.hashers import check_password
 from django.forms import model_to_dict
 from .models import Medicine, Company, Medicine_Company, Patient, Purchase
-from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from .errors import validation_error_decorator
 from copy import copy
 import uuid
 #serializers
@@ -24,10 +24,9 @@ from .serializers import (
 
 
 def Home(request):
+    # raise serializers.ValidationError
     return HttpResponse('<h1>Hello How are you</h1>')
 
-def Unknown_Routes(request):
-    return Response({'msg': 'Unkown Route'}, status=status.HTTP_404_NOT_FOUND)
 
 #external functions used in someplaces on views
 def is_uuid(s, id=''):
@@ -36,7 +35,7 @@ def is_uuid(s, id=''):
         return s
     except:
         raise serializers.ValidationError(
-            f'Error={id}={s} not valid id!'
+            {'id': id, 'det': s}
         )
 def remove_password(dict, attr):
     dict = copy(dict)
@@ -45,6 +44,7 @@ def remove_password(dict, attr):
 
 #user Authorization
 @api_view(['POST', 'GET'])
+@validation_error_decorator
 def user_register(request):
     if request.method=='POST':
         serializer = PatientSerializer(data=request.data)
@@ -61,6 +61,7 @@ def user_register(request):
 
 #user login
 @api_view(['POST', 'GET'])
+@validation_error_decorator
 def user_login(request):
     if request.method =='POST':
         user_name = request.data.get('username')
@@ -89,6 +90,7 @@ def user_login(request):
 
 #single user
 @api_view(['GET'])
+@validation_error_decorator
 def single_user(request, userID):
     amount = request.GET.get('amount', None) #for pagination purpose
     search = request.GET.get('search', None) # for search purpose
@@ -107,6 +109,7 @@ def single_user(request, userID):
         return Response(data, status= status.HTTP_200_OK)
 #user purchase
 @api_view(['GET'])
+@validation_error_decorator
 def user_purchase(request, userID):
     if(request.method == 'GET'):
         med_id = request.GET.get('medicine')
@@ -156,6 +159,7 @@ def user_purchase(request, userID):
                     'Please provide, Either the company or medicine ids'
                 )
 @api_view(['GET'])
+@validation_error_decorator
 def user_purchase_history(request, userID):
     purchases = Purchase.objects.filter(patient_id = is_uuid(userID, 'User ID'))
     return Response(
@@ -174,6 +178,7 @@ def user_purchase_history(request, userID):
 
 
 @api_view(['GET'])
+@validation_error_decorator
 def company_sales(request, compID, medID):
     # modify sales
     is_uuid(compID, 'Company ID')
@@ -205,6 +210,7 @@ def company_sales(request, compID, medID):
 
 #Company Authorization
 @api_view(['POST', 'GET'])
+@validation_error_decorator
 def company_register(request):
     if request.method=='POST':
         
@@ -224,6 +230,7 @@ def company_register(request):
     
 
 @api_view(['POST', 'GET'])
+@validation_error_decorator
 def company_login(request):
     if request.method =='POST':
         name = request.data.get('name')
@@ -252,6 +259,7 @@ def company_login(request):
 
 #Company Queries For Registered companies
 @api_view(['GET', 'POST'])
+@validation_error_decorator
 def single_company(request, compID):
     is_uuid(compID, 'Company ID')
     if(request.method=='GET'):
@@ -315,6 +323,7 @@ def single_company(request, compID):
 
 #Handle individual medicines
 @api_view(['DELETE', 'PATCH', 'GET'])
+@validation_error_decorator
 def company_medicine(request,compID,medID ):
     is_uuid(compID, 'Company ID')
     is_uuid(medID, 'Medicine ID')

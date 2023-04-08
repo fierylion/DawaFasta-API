@@ -1,14 +1,14 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import re
+from rest_framework import serializers
 #used in middleware.py
-def extract_error_message(response: HttpResponse) -> str:
-    content = response.content.decode('utf-8')
+def validation_error_decorator(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except serializers.ValidationError as exc:
+            details = exc.detail
+            return JsonResponse({'err': f'{details["id"]} is not a valid id for {details["det"]}'}, status=400)
+    
+    return wrapper
 
-    if 'validation' in content.lower():
-        error_pattern = r'Error=.+!'
-        match = re.search(error_pattern, content)
-        if match:
-            error_code = match.group()
-            return error_code.strip('!').split('=')
-      
-    return None  
