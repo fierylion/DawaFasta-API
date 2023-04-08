@@ -25,7 +25,9 @@ class Medicine(models.Model):
     owners = models.IntegerField(default=1)
     isSolid = models.BooleanField(default=True)
     def save(self, *args, **kwargs):
-        if self.expiryDate >= self.manufactureDate:
+        expiry = datetime.strptime(self.expiryDate, '%Y-%m-%d')
+        manufacture = datetime.strptime(self.manufactureDate, '%Y-%m-%d')
+        if expiry<= manufacture:
             raise serializers.ValidationError(
                 {'err': 'Expiry Date cannot be greater than Manufacture date'}
             )
