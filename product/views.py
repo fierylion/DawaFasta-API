@@ -133,13 +133,11 @@ def user_purchase(request, userID):
                 "status": "pending"
             })
             if serializer.is_valid():
+                purchase = serializer.save()
                 med = Medicine_Company.objects.get(medicine_id = purchase.medicine_id, company_id = purchase.company_id)
                 if(med.quantity<number):
                     return Response({'err': 'Insufficient Quantity'})
                 med.quantity-=number
-                med.save()
-                purchase = serializer.save()
-                
                 med.save()
                 return Response(
                     {
