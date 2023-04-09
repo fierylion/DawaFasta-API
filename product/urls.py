@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.conf.urls.static import static
 urlpatterns = [
     path('', views.Home),
     path(r'api/v1/register/company', views.company_register),
@@ -13,4 +14,5 @@ urlpatterns = [
     path(r'api/v1/user/<str:userID>', views.single_user),
     path(r'api/v1/user/<str:userID>/purchase', views.user_purchase),
     path(r'api/v1/user/<str:userID>/purchase/history', views.user_purchase_history),
+    path(r'api/docs', views.yaml_to_html)
 ]

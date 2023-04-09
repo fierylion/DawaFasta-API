@@ -1,0 +1,566 @@
+openapi: 3.0.0
+info:
+  title: Dawa_Fasta
+  contact:
+    name: Daniel Mawalla
+    email: mawalladaniel16@gmail.com
+  version: '1.0'
+servers:
+- url: https://dawafasta-project-238r.onrender.com/api/v1
+  variables: {}
+paths:
+  /register/company:
+    post:
+      tags:
+      - Company Authentication
+      summary: Register_Company
+      description: Register a company
+      operationId: Register_Company
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Register_Company_Request'
+              - example:
+                  name: medicare
+                  password: medicare
+                  description: Best seller of medicine in Tanzania
+            example:
+              name: medicare
+              password: medicare
+              description: Best seller of medicine in Tanzania
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /login/company:
+    post:
+      tags:
+      - Company Authentication
+      summary: Company_Login
+      description: Login a company,
+      operationId: Company_Login
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Company_Login_Request'
+              - example:
+                  name: medicare
+                  password: medicare
+            example:
+              name: medicare
+              password: medicare
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /company/c7eb8fcc-c751-4b23-ba85-b22789253a36:
+    post:
+      tags:
+      - Company_Medicine
+      summary: Post_Medicine_Company
+      description: Post a medicine by a specific company
+      operationId: Post_Medicine_Company
+      parameters: []
+      requestBody:
+        description: A company posts a medicine, All the fields specified in the example are requried. A default boolean isSolid field can also be added
+        content:
+          text/plain:
+            schema:
+              type: object
+              description: A company posts a medicine, All the fields specified in the example are requried. A default boolean isSolid field can also be added
+              example:
+                medicine:
+                  name: Panadol
+                  content:
+                    active_ingredients:
+                    - hexane
+                    - aspirin
+                  expiryDate: 2024-04-06
+                  manufactureDate: 2020-04-06
+                  manufacturerName: Fierylion Co
+                info:
+                  price: 4000
+                  createdAt: 2022-04-02
+                  quantity: 20
+            example:
+              medicine:
+                name: Panadol
+                content:
+                  active_ingredients:
+                  - hexane
+                  - aspirin
+                expiryDate: 2024-04-06
+                manufactureDate: 2020-04-06
+                manufacturerName: Fierylion Co
+              info:
+                price: 4000
+                createdAt: 2022-04-02
+                quantity: 20
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    get:
+      tags:
+      - Company_Medicine
+      summary: Get_Medicines
+      description: Get medicines posted by a specific company
+      operationId: Get_Medicines
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /company/c7eb8fcc-c751-4b23-ba85-b22789253a36/medicine/b4bb13a3-23d3-4ea5-911d-25551761bae7:
+    get:
+      tags:
+      - Company_Medicine
+      summary: Get_Specific_Medicine
+      description: Find a specific medicine, Provide the medicine ID
+      operationId: Get_Specific_Medicine
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    patch:
+      tags:
+      - Company_Medicine
+      summary: Update_Single_Medicine
+      description: Update Price or Quantity of medicine. By a specific company
+      operationId: Update_Single_Medicine
+      parameters: []
+      requestBody:
+        description: Provide an updated price or quantity for a specific medicine
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Update_Single_Medicine_Request'
+              - description: Provide an updated price or quantity for a specific medicine
+                example:
+                  quantity: 50
+                  price: 3000
+            example:
+              quantity: 50
+              price: 3000
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /company/c7eb8fcc-c751-4b23-ba85-b22789253a36/medicine/efd5bb69-d4d2-4ec5-a286-3fc6ebbfb6d2:
+    delete:
+      tags:
+      - Company_Medicine
+      summary: Delete_Medicine
+      operationId: Delete_Medicine
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /company/c7eb8fcc-c751-4b23-ba85-b22789253a36/medicine/b4bb13a3-23d3-4ea5-911d-25551761bae7/sales:
+    get:
+      tags:
+      - Company_Medicine
+      summary: Get_And_Update_Company_Sales
+      description: Specific sale made by a company and update its status whether it is still pending or shipped to the user
+      operationId: Get_And_Update_Company_Sales
+      parameters:
+      - name: sale
+        in: query
+        description: Specify the sale id to get and update
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 102e28c1-5093-43ad-91a7-b5ceb68ec510
+      - name: status
+        in: query
+        description: Specify the status of the sale ie Shipped or Pending
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: shipped
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /register/user:
+    post:
+      tags:
+      - User Authentication
+      summary: Register_User
+      description: Create a new user, Must provide all the fields for creating the user
+      operationId: Register_User
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Register_User_Request'
+              - example:
+                  name: fierylion
+                  birth_date: 1980-01-16
+                  username: fierylion
+                  email: fierylion@gmail.com
+                  password: fierylion
+            example:
+              name: fierylion
+              birth_date: 1980-01-16
+              username: fierylion
+              email: fierylion@gmail.com
+              password: fierylion
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /login/user:
+    post:
+      tags:
+      - User Authentication
+      summary: User_Login
+      operationId: User_Login
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/User_Login_Request'
+              - example:
+                  username: fierylion
+                  password: fierylion
+            example:
+              username: fierylion
+              password: fierylion
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /user/6cf2bac6-1928-4c68-9025-c8630722b944/purchase:
+    get:
+      tags:
+      - User_Medicine
+      summary: User_Purchase
+      operationId: User_Purchase
+      parameters:
+      - name: medicine
+        in: query
+        description: The medicine id that the user wants to purchase
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: b4bb13a3-23d3-4ea5-911d-25551761bae7
+      - name: company
+        in: query
+        description: The company id that the user wants to purchase from
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: c7eb8fcc-c751-4b23-ba85-b22789253a36
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /user/6cf2bac6-1928-4c68-9025-c8630722b944/purchase/history:
+    get:
+      tags:
+      - User_Medicine
+      summary: User_Purchase_History
+      operationId: User_Purchase_History
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /user/6cf2bac6-1928-4c68-9025-c8630722b944:
+    get:
+      tags:
+      - User_Medicine
+      summary: User_Get_Medicine
+      operationId: User_Get_Medicine
+      parameters:
+      - name: amount
+        in: query
+        description: The amount of medicine items to return
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int32
+          example: 5
+      - name: search
+        in: query
+        description: Search for a specific medicine or medicines
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Panadol
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+components:
+  schemas:
+    Register_Company_Request:
+      title: Register_Company_Request
+      required:
+      - name
+      - password
+      - description
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        description:
+          type: string
+      example:
+        name: medicare
+        password: medicare
+        description: Best seller of medicine in Tanzania
+    Company_Login_Request:
+      title: Company_Login_Request
+      required:
+      - name
+      - password
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+      example:
+        name: medicare
+        password: medicare
+    Post_Medicine_Company_Request:
+      title: Post_Medicine_Company_Request
+      required:
+      - medicine
+      - info
+      type: object
+      properties:
+        medicine:
+          allOf:
+          - $ref: '#/components/schemas/Medicine'
+          - {}
+        info:
+          allOf:
+          - $ref: '#/components/schemas/Info'
+          - {}
+      example:
+        medicine:
+          name: Panadol
+          content:
+            active_ingredients:
+            - hexane
+            - aspirin
+          expiryDate: 2024-04-06
+          manufactureDate: 2020-04-06
+          manufacturerName: Fierylion Co
+        info:
+          price: 4000
+          createdAt: 2022-04-02
+          quantity: 20
+    Medicine:
+      title: Medicine
+      required:
+      - name
+      - content
+      - expiryDate
+      - manufactureDate
+      - manufacturerName
+      type: object
+      properties:
+        name:
+          type: string
+        content:
+          allOf:
+          - $ref: '#/components/schemas/Content'
+          - {}
+        expiryDate:
+          type: string
+        manufactureDate:
+          type: string
+        manufacturerName:
+          type: string
+      example:
+        name: Panadol
+        content:
+          active_ingredients:
+          - hexane
+          - aspirin
+        expiryDate: 2024-04-06
+        manufactureDate: 2020-04-06
+        manufacturerName: Fierylion Co
+    Content:
+      title: Content
+      required:
+      - active_ingredients
+      type: object
+      properties:
+        active_ingredients:
+          type: array
+          items:
+            type: string
+          description: ''
+      example:
+        active_ingredients:
+        - hexane
+        - aspirin
+    Info:
+      title: Info
+      required:
+      - price
+      - createdAt
+      - quantity
+      type: object
+      properties:
+        price:
+          type: integer
+          format: int32
+        createdAt:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+      example:
+        price: 4000
+        createdAt: 2022-04-02
+        quantity: 20
+    Update_Single_Medicine_Request:
+      title: Update_Single_Medicine_Request
+      required:
+      - quantity
+      - price
+      type: object
+      properties:
+        quantity:
+          type: integer
+          format: int32
+        price:
+          type: integer
+          format: int32
+      example:
+        quantity: 50
+        price: 3000
+    Register_User_Request:
+      title: Register_User_Request
+      required:
+      - name
+      - birth_date
+      - username
+      - email
+      - password
+      type: object
+      properties:
+        name:
+          type: string
+        birth_date:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        name: fierylion
+        birth_date: 1980-01-16
+        username: fierylion
+        email: fierylion@gmail.com
+        password: fierylion
+    User_Login_Request:
+      title: User_Login_Request
+      required:
+      - username
+      - password
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      example:
+        username: fierylion
+        password: fierylion
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security: []
+tags:
+- name: Misc
+  description: ''
+- name: Company Authentication
+  description: ''
+- name: Company_Medicine
+  description: ''
+- name: User Authentication
+  description: ''
+- name: User_Medicine
+  description: ''
