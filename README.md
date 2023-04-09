@@ -1,3 +1,7 @@
+# Motivation
+
+Applying for intenship at `Medikea Company`
+
 # DawaFasta-API
 Dawa Fasta connects customers with multiple pharmacies to buy medicine online, while allowing pharmacies to expand their reach and sell or buy in bulk orders Online.
 
