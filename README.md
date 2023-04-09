@@ -1,6 +1,6 @@
 # Motivation
 
-Applying for an intenship and practical training position at `Medikea Company`
+Applying for a practical training position at `Medikea Company`
 
 # DawaFasta-API
 Dawa Fasta connects customers with multiple pharmacies to buy medicine online, while allowing pharmacies to expand their reach and sell or buy in bulk orders Online.
