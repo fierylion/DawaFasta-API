@@ -7,7 +7,7 @@ Dawa Fasta connects customers with multiple pharmacies to buy medicine online, w
   
 # Database Mockup
 
-![Database Mockup](https://imgur.com/5PFS8zy)
+![Database Mockup](https://github.com/fierylion/DawaFasta-API/blob/main/Database%20Mockup.png)
      
 # Features
 
