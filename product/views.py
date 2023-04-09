@@ -31,7 +31,7 @@ from .serializers import (
 
 def Home(request):
     # raise serializers.ValidationError
-    return HttpResponse('<h1>Hello How are you</h1>')
+    return HttpResponse('<h1>Hello How are you</h1> <br/> <hr/> <b><h1><a target="_blank" href="/api/docs" styles="color:blue;">Read DawaFasta API docs</a></h1></b>')
 
 
 #external functions used in someplaces on views
