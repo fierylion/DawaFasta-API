@@ -78,7 +78,7 @@ def user_login(request):
                 #check for password
                 if(not check_password(password, patient.password)):
                     raise Exception
-            except Company.DoesNotExist:
+            except Patient.DoesNotExist:
                 return Response({'err': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
             
             # Create token

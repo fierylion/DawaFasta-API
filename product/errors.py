@@ -4,8 +4,10 @@ from rest_framework import serializers
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 from datetime import date
+from functools import wraps
 #used in middleware.py
 def validation_error_decorator(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
