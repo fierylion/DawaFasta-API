@@ -16,11 +16,12 @@ def user_authentication_middleware(get_response):
                     'err': "Invalid Route"
                 }, status=404)
             path_details[4] = username_to_id('user', path_id)
+            path_id = path_details[4]
             # if not is_uuid(path_details[4]):
             #     return JsonResponse({'error': 'Invalid Route'}, status=404)
             request.path = '/'.join(path_details)
             if 'Authorization' not in request.headers:
-                return JsonResponse({'error': 'User not    authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+                return JsonResponse({'error': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
             token = request.headers['Authorization'].split()[1]
             try:
                 #verify token
@@ -47,6 +48,7 @@ def company_authentication_middleware(get_response):
                     'err': "Invalid Route"
                 }, status=404)
             path_details[4] = username_to_id('company', path_id)
+
             # if not is_uuid(path_details[4]):
             #     return JsonResponse({'error': 'Invalid Route'}, status=404)
             request.path = '/'.join(path_details)
