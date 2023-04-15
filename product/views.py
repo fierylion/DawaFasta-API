@@ -102,6 +102,7 @@ def single_user(request, userID):
     search = request.GET.get('search', None) # for search purpose
     results = []
     # only ten result are maximum unless specified
+    userID = request.userID
     try:
         user = Patient.objects.get(id=userID)
     except Patient.DoesNotExist:
