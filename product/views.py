@@ -247,7 +247,7 @@ def company_login(request):
             try:
                 company = Company.objects.get(name=name)   
                 if(not check_password(password, company.password)):
-                    raise Exception
+                    raise Company.DoesNotExist
             except Company.DoesNotExist:
                 return Response({'err': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
             
