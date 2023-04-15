@@ -5,6 +5,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 import json
 from datetime import date
 from functools import wraps
+import uuid
+from .models import Company, Patient, Medicine 
 #used in middleware.py
 def validation_error_decorator(func):
     @wraps(func)
@@ -26,5 +28,24 @@ def customJSONEncoder(obj):
     if isinstance(obj, date):
         return obj.isoformat()
     return obj
+
+def username_to_id(type, data):
+    m = {'company': Company,  'medicine':Medicine}
+    try:
+        uuid.UUID(data)
+        return data
+    except:
+        try:
+            if(type=='patient'):
+                patient = Patient.get(username=data)
+                return patient.id
+            else:
+               spec= m.get(type, None).get(name=data)
+               return spec.id
+        except (Company.DoesNotExist, Patient.DoesNotExist, Medicine.DoesNotExist):
+            return data
+        except AttributeError:
+            return data
+            
 
 

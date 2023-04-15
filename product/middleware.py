@@ -2,17 +2,28 @@ import jwt
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
 from rest_framework import status
-
+import uuid
+from .errors import username_to_id
+def is_uuid(id):
+    try:
+        uuid.UUID(id)
+        return True
+    except:
+        return False
 
 def user_authentication_middleware(get_response):
     def middleware(request):
-        if(request.path.startswith('/api/v1/user')):
+        if request.path.startswith('/api/v1/user'):
             path_details = request.path.split('/')
-            path_id = None if len(path_details)<=4 else path_details[4]
-            if(path_id is None):
+            path_id = None if len(path_details) <= 4 else path_details[4]
+            if path_id is None:
                 return JsonResponse({
                     'err': "Invalid Route"
                 }, status=404)
+            path_details[4] = username_to_id('user', path_id)
+            if not is_uuid(path_details[4]):
+                return JsonResponse({'error': 'Invalid Route'}, status=404)
+            request.path = '/'.join(path_details)
             if 'Authorization' not in request.headers:
                 return JsonResponse({'error': 'User not    authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
             token = request.headers['Authorization'].split()[1]
@@ -33,15 +44,17 @@ def user_authentication_middleware(get_response):
 
 def company_authentication_middleware(get_response):
     def middleware(request):
-    
-        if(request.path.startswith('/api/v1/company')):
-            #ensure it is the correct company
+        if request.path.startswith('/api/v1/company'):
             path_details = request.path.split('/')
-            path_id = None if len(path_details)<=4 else path_details[4]
-            if(path_id is None):
+            path_id = None if len(path_details) <= 4 else path_details[4]
+            if path_id is None:
                 return JsonResponse({
                     'err': "Invalid Route"
                 }, status=404)
+            path_details[4] = username_to_id('user', path_id)
+            if not is_uuid(path_details[4]):
+                return JsonResponse({'error': 'Invalid Route'}, status=404)
+            request.path = '/'.join(path_details)
             if 'Authorization' not in request.headers:
                 return JsonResponse({'error': 'Company not authenticated, SignUp for a company'}, status=status.HTTP_401_UNAUTHORIZED)
             token = request.headers['Authorization'].split()[1].strip()
