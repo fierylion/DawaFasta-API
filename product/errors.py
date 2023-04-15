@@ -37,11 +37,11 @@ def username_to_id(type, data):
     except:
         try:
             if(type=='patient'):
-                patient = Patient.get(username=data)
-                return patient.id
+                patient = Patient.objects.get(username=data)
+                return str(patient.id)
             else:
-               spec= m.get(type, None).get(name=data)
-               return spec.id
+               spec= m.get(type, None).objects.get(name=data)
+               return str(spec.id)
         except (Company.DoesNotExist, Patient.DoesNotExist, Medicine.DoesNotExist):
             return data
         except AttributeError:
