@@ -102,7 +102,6 @@ def single_user(request, userID):
     search = request.GET.get('search', None) # for search purpose
     results = []
     # only ten result are maximum unless specified
-    userID = request.userID
     try:
         user = Patient.objects.get(id=userID)
     except Patient.DoesNotExist:
@@ -119,6 +118,7 @@ def single_user(request, userID):
         return Response(data, status= status.HTTP_200_OK)
     elif(not amount):
         medicines = Medicine_Company.objects.filter(quantity__gte=1)[slice(0, 10)] if(not search) else results
+        print(medicines)
         data = {'Medicines': [ {"company": remove_password(model_to_dict(mc.company_id), "password"),"quantity":mc.quantity, "price":mc.price, "medicine":model_to_dict(mc.medicine_id)} for mc in medicines], 'User':{
             'username': user.username,
             'name': user.name,
@@ -182,6 +182,8 @@ def user_purchase_history(request, userID):
         {'data': [
         {
         "id": purchase.id,
+        "medicine": purchase.medicine_id.name,
+        
             "company": purchase.company_id.name,
             "customer_name": purchase.patient_id.name,
             "amount": purchase.number,

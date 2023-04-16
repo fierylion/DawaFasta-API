@@ -29,23 +29,3 @@ def customJSONEncoder(obj):
         return obj.isoformat()
     return obj
 
-def username_to_id(type, data):
-    m = {'company': Company,  'medicine':Medicine}
-    try:
-        uuid.UUID(data)
-        return data
-    except:
-        try:
-            if(type=='patient'):
-                patient = Patient.objects.get(username=data)
-                return str(patient.id)
-            else:
-               spec= m.get(type, None).objects.get(name=data)
-               return str(spec.id)
-        except (Company.DoesNotExist, Patient.DoesNotExist, Medicine.DoesNotExist):
-            return data
-        except AttributeError:
-            return data
-            
-
-
