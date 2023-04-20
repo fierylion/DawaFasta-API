@@ -98,15 +98,26 @@ WSGI_APPLICATION = 'DawaFasta.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'DAWA_FASTA',
+#         'USER': os.getenv('USER'),
+#         'PASSWORD': os.getenv('PASSWORD'),
+#         'HOST': os.getenv('HOST'),
+#         'PORT': '3306'
+#     }
+# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DAWA_FASTA',
-        'USER': os.getenv('USER'),
-        'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': os.getenv('HOST'),
+        'NAME': 'dawa_fasta',
+        'USER': 'root',
+        'PASSWORD': 'fierylion',
+        'HOST': '127.0.0.1',
         'PORT': '3306'
     }
+
 }
 
 

@@ -218,6 +218,11 @@ def company_sales(request, compID, medID):
             return Response({'err': f'The sale with the id {sale_id} does not exist'})
     else:
         sales = Purchase.objects.filter(company_id=compID, medicine_id=medID)
+        name=''
+        try:
+            name = Medicine.objects.get(id=medID).name
+        except Medicine.DoesNotExist:
+            return Response({'err': 'Medicine doesnt exist'})
         data = [{
             "id": purchase.id,
             "company": purchase.company_id.name,
@@ -226,7 +231,7 @@ def company_sales(request, compID, medID):
             "time": purchase.purchase_time,
             "status": purchase.status
         } for purchase in sales]
-        return Response({'data': data}, status=status.HTTP_200_OK)
+        return Response({'data': data, 'name':name}, status=status.HTTP_200_OK)
 
 
 
@@ -288,11 +293,11 @@ def single_company(request, compID):
         search = request.GET.get('search', None)
         if search:
             medicines = Medicine_Company.objects.filter(medicine_id__name__icontains = search, company_id_id=compID)
-            data = {'Company':remove_password(model_to_dict(Company.objects.get(id=compID)), 'password') , 'Medicines': [ model_to_dict(mc.medicine_id) for mc in medicines]}
+            data = {'Company':remove_password(model_to_dict(Company.objects.get(id=compID)), 'password') , 'Medicines': [ {'med':model_to_dict(mc.medicine_id), 'info': {'price': mc.price, 'quantity': mc.quantity}} for mc in medicines]}
             return Response(data, status= status.HTTP_200_OK)
         else:
             medicines = Medicine_Company.objects.filter(company_id_id=compID)
-            data = {'Company': remove_password(model_to_dict(Company.objects.get(id=compID)), 'password'), 'Medicines': [ model_to_dict(mc.medicine_id) for mc in medicines]}
+            data = {'Company': remove_password(model_to_dict(Company.objects.get(id=compID)), 'password'), 'Medicines': [ {'med':model_to_dict(mc.medicine_id), 'info': {'price': mc.price, 'quantity': mc.quantity}} for mc in medicines]}
             return Response(data, status= status.HTTP_200_OK)
     elif(request.method=='POST'):
         #update the medicine
